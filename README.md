@@ -193,6 +193,21 @@ comparably slow motions, there is likely a problem with camera calibration which
 
 **For adjusting your config you might also find the tips [given on this page](doc/RealsenseLiveVersion.md#adjusting-the-config-file) interesting.**
 
+### Docker Usage
+We provide a Dockerfile for easy setup. Build the image with
+
+```bash
+docker build -t dmvio .
+```
+
+Download a EuRoC sequence and run DM-VIO inside the container:
+
+```bash
+docker run --rm -it dmvio ./download_euroc.sh /workspace/datasets
+docker run --rm -it dmvio ./run_euroc.sh /workspace/datasets
+```
+
+
 ### 6 License
 DM-VIO is based on Direct Sparse Odometry (DSO), which was developed by Jakob Engel 
 at the Technical University of Munich and Intel.

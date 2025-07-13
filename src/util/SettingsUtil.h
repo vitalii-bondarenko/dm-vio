@@ -27,7 +27,9 @@
 #include <iostream>
 #include <functional>
 #include <assert.h>
+#ifdef HAS_PANGOLIN
 #include <pangolin/var/var.h>
+#endif
 
 // This file contains utils for settings.
 // Most settings should be in (potentially nested) settings classes which.
@@ -73,6 +75,7 @@ public:
 template<typename T> class PangolinSetting : public PangolinSettingVar
 {
 public:
+#ifdef HAS_PANGOLIN
     PangolinSetting(std::string name, T* pointer, bool toggle)
             : name(name), pointer(pointer), toggle(toggle), boolConstr(true)
     {}
@@ -84,12 +87,9 @@ public:
     void createVar() override
     {
         if(boolConstr)
-        {
             var.reset(new pangolin::Var<T>("ui." + name, *pointer, toggle));
-        }else
-        {
+        else
             var.reset(new pangolin::Var<T>("ui." + name, *pointer, min, max));
-        }
     }
 
     void updateVar() override
@@ -104,6 +104,11 @@ private:
     T* pointer;
     bool boolConstr, toggle;
     double min, max;
+#else
+    PangolinSetting(std::string, T*, double, double) {}
+    void createVar() override {}
+    void updateVar() override {}
+#endif
 };
 
 class SettingsUtil
